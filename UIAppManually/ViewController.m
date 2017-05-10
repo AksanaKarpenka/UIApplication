@@ -92,7 +92,7 @@
                                                         blue:(70 / 255.0)
                                                        alpha:0.6]
                               forState:UIControlStateNormal];
-    [self.greetingButton addTarget:self action:@selector(handleGreetingButton:)
+    [self.greetingButton addTarget:self action:@selector(handleGreetingButtonClick:)
                   forControlEvents:UIControlEventTouchUpInside];
     self.greetingButton.titleEdgeInsets = UIEdgeInsetsMake(2, 3, 2, 3);
     self.greetingButton.contentVerticalAlignment = UIControlContentVerticalAlignmentBottom;
@@ -103,18 +103,37 @@
     [self.view addSubview:self.firstNameTextField];
     [self.view addSubview:self.lastNameTextField];
     [self.view addSubview:self.greetingButton];
-
 }
 
-- (void)handleGreetingButton:(UIButton *)sender {
-    NSString *helloStr = [NSString stringWithFormat:@"Hello, %@ %@", self.firstNameTextField.text, self.lastNameTextField.text];
-    [sender setTitle:helloStr forState:UIControlStateNormal];
+- (void)handleGreetingButtonClick:(UIButton *)sender {
+    [sender setTitle:[self greetingString] forState:UIControlStateNormal];
+}
+
+- (NSMutableString *)greetingString {
+    NSMutableString *greetingString = [NSMutableString stringWithFormat:@"Hello"];
+    NSString *firstName = ([self.firstNameTextField hasText]) ? self.firstNameTextField.text : nil;
+    NSString *lastName = ([self.lastNameTextField hasText]) ? self.lastNameTextField.text : nil;
+    
+    if (!firstName && !lastName) {
+        return greetingString;
+    }
+    
+    [greetingString appendString:@","];
+    
+    if (firstName) {
+        [greetingString appendString:[NSString stringWithFormat:@" %@", firstName]];
+    }
+    
+    if (lastName) {
+        [greetingString appendString:[NSString stringWithFormat:@" %@", lastName]];
+    }
+    
+    return greetingString;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 
 @end
